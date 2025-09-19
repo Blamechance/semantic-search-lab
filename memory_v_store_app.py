@@ -2,6 +2,8 @@ from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_voyageai import VoyageAIEmbeddings
+from langchain_core.vectorstores import InMemoryVectorStore
+
 import getpass
 import os
 
@@ -15,6 +17,8 @@ embeddings = VoyageAIEmbeddings(model="voyage-3-lite")
 if not os.environ.get("VOYAGE_API_KEY"):
     os.environ["VOYAGE_API_KEY"] = getpass.getpass("Enter API key for Voyage AI: ")
 
+# Instantiate the in-memory vectore store with defined embedding function:
+vector_store = InMemoryVectorStore(embeddings) 
 
 # Load pdf file locally: 
 file_path = "./documents/nke-10k-2023.pdf"
@@ -34,7 +38,23 @@ all_splits = text_splitter.split_documents(docs)
 vector_1 = embeddings.embed_query(all_splits[0].page_content)
 vector_2 = embeddings.embed_query(all_splits[1].page_content)
 
-
 assert len(vector_1) == len(vector_2)
 print(f"Generated vectors of length {len(vector_1)}\n")
 print(vector_1[:10])
+
+# index the documents/chunks within the vector store: 
+""" 
+After indexing, the documents will be queryable. Some functions to try:
+- similarity_search()
+- similarity_search_with_score()
+- embed_query()
+"""
+ids = vector_store.add_documents(documents=all_splits)
+
+# Run a test similarity search: 
+results = vector_store.similarity_search(
+    "How many distribution centers does Nike have in the US?"
+)
+
+print(results[0])
+
