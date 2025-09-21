@@ -26,7 +26,7 @@ loader = PyPDFLoader(file_path)
 
 docs = loader.load()
 
-# Create the text splitter class: 
+# Use langchain's text splitter: 
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000, chunk_overlap=200, add_start_index=True
 )

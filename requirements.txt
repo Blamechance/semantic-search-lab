@@ -8,6 +8,7 @@ attrs==25.3.0
 certifi==2025.8.3
 charset-normalizer==3.4.3
 dataclasses-json==0.6.7
+dnspython==2.8.0
 filelock==3.19.1
 frozenlist==1.7.0
 fsspec==2025.9.0
@@ -23,9 +24,11 @@ jsonpointer==3.0.0
 langchain==0.3.27
 langchain-community==0.3.29
 langchain-core==0.3.76
+langchain-mongodb==0.7.0
 langchain-text-splitters==0.3.11
 langchain-voyageai==0.1.7
 langsmith==0.4.27
+lark==1.2.2
 marshmallow==3.26.1
 multidict==6.6.4
 mypy_extensions==1.1.0
@@ -37,6 +40,7 @@ propcache==0.3.2
 pydantic==2.11.9
 pydantic-settings==2.10.1
 pydantic_core==2.33.2
+pymongo==4.15.1
 pypdf==6.0.0
 python-dotenv==1.1.1
 PyYAML==6.0.2
