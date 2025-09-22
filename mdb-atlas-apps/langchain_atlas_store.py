@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from langchain_voyageai import VoyageAIEmbeddings
 from langchain_mongodb import MongoDBAtlasVectorSearch
 from langchain_mongodb.vectorstores import MongoDBAtlasVectorSearch
-
+from langchain_community.retrievers import KNNRetriever
 
 import getpass
 import os
@@ -11,7 +11,9 @@ import os
 load_dotenv()
 
 # Choose embedding model and load API key: 
-embeddings = VoyageAIEmbeddings(model="voyage-3-lite")
+# embeddings = VoyageAIEmbeddings(model="voyage-3-large")
+
+embeddings = VoyageAIEmbeddings(model="voyage-3-large", output_dimension=2048)  
 
 if not os.environ.get("VOYAGE_API_KEY"):
     os.environ["VOYAGE_API_KEY"] = getpass.getpass("Enter API key for Voyage AI: ")
@@ -22,16 +24,8 @@ vector_store = MongoDBAtlasVectorSearch.from_connection_string(
   namespace = "sample_mflix.embedded_movies",  # Database and collection name
   # embedding = VoyageAIEmbeddings(),                 # Embedding model to use
   embedding = embeddings, # re-use placeholder above for now
-  index_name = "langchain_vector_index",                      # Name of the vector search index
+  index_name = "vector_index_test",                      # Name of the vector search index
+  embedding_key="plot_embedding_voyage_3_large"
 )
 
-# Use the vector store as a retriever
-retriever = vector_store.as_retriever()
-
-# Define your query
-query = "Are there any time travel movies including japanese people?"
-
-# Print results
-documents = retriever.invoke(query)
-for doc in documents:
-   print(doc)
+# Test retrieval using instantiated Atlas Vector Store:
